@@ -69,6 +69,72 @@ git clone https://github.com/birulyy2121/CinemaForge.git ~/.agents/skills/cinema
 
 ---
 
+## 🚀 Quick Install & Activation
+
+### 1. Tell your agent to install the skill:
+Simply copy and paste this URL into your conversation with **Antigravity**, **Claude Code**, **Cursor**, or **Codex**:
+
+> *"Install this skill: https://github.com/birulyy2121/CinemaForge"*
+
+### 2. Activate or reference the skill:
+Once installed, your agent automatically knows CinemaForge! You can also explicitly say:
+> *"Use the cinemaforge skill to make this video."*
+
+---
+
+## 🗣️ What to Tell Your Agent (Copy & Paste Prompts)
+
+Here are the battle-tested prompt recipes you can copy, fill in, and send directly to your AI agent:
+
+### 🚀 1. SaaS Product Launch Ad (30 Seconds, 16:9)
+```text
+Create a 30-second AAA-tier SaaS product launch video using CinemaForge and HyperFrames for [My Product].
+- Palette: Midnight obsidian (#070708) with electric teal (#43d3c9) accents
+- Hook (0–3s): Stop-the-scroll kinetic typography: "[Problem statement]"
+- Build (3–12s): 3 staggered pain-point cards with back.out(1.7) overshoot
+- Reveal (12–22s): Desktop browser mockup with spring entry, live animated odometer counters, and SVG feature lines
+- Resolve (22–30s): Logo settle with breathing scale and CTA button pulse
+- Render: 4K 60fps with 4x subframe motion blur and subtle film grain overlay
+```
+
+### 📱 2. Viral Social Reel (15 Seconds, 9:16 Vertical)
+```text
+Make a 15-second 9:16 vertical motion graphics reel using CinemaForge for Instagram Reels / TikTok.
+- Topic: "[e.g. 5 rules of high-end UI design]"
+- Framing: Centered 9:16 smartphone viewport with notch and dark-mode UI
+- Pacing: High velocity with 0.3s snappy transitions
+- Keyframes: Staggered numbered badges with glow pulse, kinetic word pops on key phrases
+- Loop: Ensure the ending frame seamlessly transitions into the first frame for infinite auto-looping
+```
+
+### 🔤 3. Kinetic Typography Manifesto Video (20 Seconds)
+```text
+Create a 20-second kinetic typography manifesto video using CinemaForge.
+- Voice/Script: "[Insert your 4-line script here]"
+- Typography: High-contrast mix of italic serif (Fraunces/Instrument Serif) and bold grotesque (Geist/Inter)
+- Motion: Character cascade text entries, beat-synced word punches (scale 1.5 -> 1.0 with back.out(2)), and line wipes
+- Invariant: Zero linear easing. Every word must have weight, momentum, and follow-through.
+```
+
+### 📊 4. Executive KPI Dashboard & Data Showcase
+```text
+Build a data showcase video in HyperFrames using CinemaForge.
+- Metrics: Monthly Revenue ($2.4M), Active Users (48,200), Response Time (42ms)
+- Animations: Numbers must roll like odometers using power2.out, bar charts grow with spring physics, circular SVG progress rings fill dynamically
+- Visuals: Dark glassmorphic cards with 20px backdrop blur, subtle ambient radial glow, and hair-line borders
+```
+
+### ⚛️ 5. Remotion (React + TypeScript) Video
+```text
+Create a Remotion composition in React using CinemaForge motion design principles.
+- Use spring() with closed-form physics (stiffness: 180, damping: 12, mass: 1)
+- Never use linear interpolation or default transitions
+- Stagger children components with frame delays
+- Implement dark mode styling with subtle noise grain overlay
+```
+
+---
+
 ## What It Does
 
 When you tell your AI agent to **"make a product launch video"** or **"create a motion graphics ad"**, CinemaForge activates and ensures the agent:

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070708"/>
+      <stop offset="50%" stop-color="#0c0d11"/>
+      <stop offset="100%" stop-color="#050507"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#43d3c9"/>
+      <stop offset="50%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#ffd000"/>
+    </linearGradient>
+    <linearGradient id="hazardGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffcc00"/>
+      <stop offset="100%" stop-color="#ffe600"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="30" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+    <pattern id="hazardStripes" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="20" fill="#ffcc00"/>
+      <rect x="10" width="10" height="20" fill="#141414"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="400" fill="url(#bgGrad)"/>
+  <rect width="1200" height="400" fill="url(#grid)"/>
+  <circle cx="200" cy="100" r="180" fill="#43d3c9" opacity="0.08" filter="url(#glow)"/>
+  <circle cx="1000" cy="300" r="220" fill="#ffcc00" opacity="0.06" filter="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#hazardStripes)"/>
+  <g transform="translate(140, 130)">
+    <rect x="-60" y="-60" width="120" height="120" rx="28" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+    <rect x="-48" y="-48" width="96" height="96" rx="20" fill="rgba(255,255,255,0.02)" stroke="url(#accentGrad)" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="28" fill="none" stroke="#ffcc00" stroke-width="3"/>
+    <path d="M -28 0 L 28 0 M 0 -28 L 0 28" stroke="#ffcc00" stroke-width="3"/>
+    <path d="M 0 0 L 20 -20 M 0 0 L -20 20" stroke="#43d3c9" stroke-width="2"/>
+    <circle cx="0" cy="0" r="6" fill="#ffffff"/>
+  </g>
+  <g transform="translate(240, 175)">
+    <text font-family="'Inter', system-ui, -apple-system, sans-serif" font-weight="900" font-size="74" fill="#ffffff" letter-spacing="-2.5">
+      Cinema<tspan fill="url(#accentGrad)">Forge</tspan>
+    </text>
+    <text y="50" font-family="'JetBrains Mono', 'Geist Mono', monospace" font-size="15" fill="rgba(255,255,255,0.45)" letter-spacing="3.5" text-transform="uppercase">
+      AAA AI MOTION GRAPHICS ENGINE • AFTER EFFECTS GRADE
+    </text>
+    <g transform="translate(0, 85)">
+      <g>
+        <rect width="165" height="30" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <circle cx="15" cy="15" r="4" fill="#43d3c9"/>
+        <text x="28" y="20" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#e2e8f0">Spring Physics</text>
+      </g>
+      <g transform="translate(180, 0)">
+        <rect width="215" height="30" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <circle cx="15" cy="15" r="4" fill="#38bdf8"/>
+        <text x="28" y="20" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#e2e8f0">HyperFrames • Remotion</text>
+      </g>
+      <g transform="translate(410, 0)">
+        <rect width="155" height="30" rx="8" fill="rgba(255,204,0,0.08)" stroke="rgba(255,204,0,0.3)"/>
+        <circle cx="15" cy="15" r="4" fill="#ffcc00"/>
+        <text x="28" y="20" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#ffcc00">4K 60FPS Blur</text>
+      </g>
+      <g transform="translate(580, 0)">
+        <rect width="180" height="30" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <circle cx="15" cy="15" r="4" fill="#a855f7"/>
+        <text x="28" y="20" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#e2e8f0">Installable AI Skill</text>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(980, 180)" opacity="0.35">
+    <path d="M 0 80 C 40 80, 60 -40, 120 -40 S 140 60, 180 60" fill="none" stroke="url(#accentGrad)" stroke-width="2.5" stroke-dasharray="4 4"/>
+    <circle cx="0" cy="80" r="4" fill="#43d3c9"/>
+    <circle cx="120" cy="-40" r="5" fill="#ffcc00"/>
+    <circle cx="180" cy="60" r="4" fill="#43d3c9"/>
+    <text x="80" y="110" font-family="'JetBrains Mono', monospace" font-size="11" fill="rgba(255,255,255,0.4)" text-anchor="middle">ω₀ = √(k/m) · ζ &lt; 1</text>
+  </g>
+  <rect x="0" y="396" width="1200" height="4" fill="url(#hazardStripes)"/>
+</svg>

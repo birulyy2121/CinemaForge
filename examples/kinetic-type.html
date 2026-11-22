@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #070708; color: #f2f2f2; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; }
+    
+    .grain::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.5; mix-blend-mode: overlay;
+    }
+
+    .scene {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 10%; opacity: 0;
+    }
+
+    .word {
+      display: inline-block;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+    }
+
+    .word-row {
+      display: flex; gap: 20px; align-items: baseline; justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .s120 { font-size: 120px; }
+    .s80 { font-size: 80px; }
+    .s64 { font-size: 64px; }
+    .s48 { font-size: 48px; }
+    .s36 { font-size: 36px; }
+    .s24 { font-size: 24px; }
+    
+    .accent { color: #43d3c9; }
+    .muted { color: rgba(255,255,255,0.3); }
+    .italic { font-style: italic; font-weight: 300; }
+    
+    .divider {
+      width: 80px; height: 2px;
+      background: rgba(255,255,255,0.15);
+      margin: 32px 0;
+    }
+  </style>
+</head>
+
+<body class="grain">
+  <div id="root"
+    data-composition-id="kinetic-type"
+    data-start="0"
+    data-duration="20"
+    data-width="1920"
+    data-height="1080"
+    data-fps="60"
+  >
+    <!-- PHASE 1: Opening question (0-4s) -->
+    <div class="scene" id="s1">
+      <div class="word-row">
+        <span class="word s48 muted" id="w1">What if</span>
+      </div>
+      <div class="word-row">
+        <span class="word s120" id="w2">design</span>
+      </div>
+      <div class="word-row">
+        <span class="word s80 italic muted" id="w3">could</span>
+        <span class="word s80" id="w4">think?</span>
+      </div>
+    </div>
+
+    <!-- PHASE 2: Building tension (4-10s) -->
+    <div class="scene" id="s2">
+      <div class="word-row">
+        <span class="word s64" id="w5">Not templates.</span>
+      </div>
+      <div class="divider" id="div1"></div>
+      <div class="word-row">
+        <span class="word s64" id="w6">Not presets.</span>
+      </div>
+      <div class="divider" id="div2"></div>
+      <div class="word-row">
+        <span class="word s64" id="w7">Not shortcuts.</span>
+      </div>
+    </div>
+
+    <!-- PHASE 3: Climax (10-15s) -->
+    <div class="scene" id="s3">
+      <div class="word-row">
+        <span class="word s48 muted" id="w8">Real</span>
+      </div>
+      <div class="word-row">
+        <span class="word s120 accent" id="w9">motion</span>
+      </div>
+      <div class="word-row">
+        <span class="word s80" id="w10">that</span>
+        <span class="word s80 accent" id="w11">breathes.</span>
+      </div>
+    </div>
+
+    <!-- PHASE 4: Resolution (15-20s) -->
+    <div class="scene" id="s4">
+      <div class="word-row">
+        <span class="word s36 muted" id="w12">crafted by</span>
+      </div>
+      <div class="word-row">
+        <span class="word s80" id="w13">CinemaForge</span>
+      </div>
+      <div class="divider" id="div3"></div>
+      <div class="word-row">
+        <span class="word s24 muted" id="w14">cinemaforge.dev</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // ─── PHASE 1: Opening Question (0–4s) ───
+    tl.to('#s1', { opacity: 1, duration: 0.01 }, 0);
+
+    tl.from('#w1', { y: 30, opacity: 0, duration: 0.8, ease: "power3.out" }, 0.3);
+    tl.from('#w2', { scale: 1.5, opacity: 0, duration: 0.8, ease: "back.out(1.7)" }, 0.8);
+    tl.from('#w3', { x: -60, opacity: 0, duration: 0.6, ease: "power4.out" }, 1.4);
+    tl.from('#w4', { x: 60, opacity: 0, duration: 0.6, ease: "power4.out" }, 1.5);
+
+    // "think?" gets a text shadow pulse
+    tl.to('#w4', { textShadow: '0 0 60px rgba(255,255,255,0.3)', duration: 0.8, ease: "power2.out" }, 2.0);
+
+    tl.to('#s1', { opacity: 0, y: -30, duration: 0.5, ease: "power2.in" }, 3.5);
+
+    // ─── PHASE 2: Building Tension (4–10s) ───
+    tl.to('#s2', { opacity: 1, duration: 0.01 }, 4);
+
+    tl.from('#w5', { x: -100, opacity: 0, duration: 0.5, ease: "power4.out" }, 4.3);
+    tl.from('#div1', { scaleX: 0, duration: 0.4, ease: "power3.out" }, 4.8);
+    tl.from('#w6', { x: 100, opacity: 0, duration: 0.5, ease: "power4.out" }, 5.5);
+    tl.from('#div2', { scaleX: 0, duration: 0.4, ease: "power3.out" }, 6.0);
+    tl.from('#w7', { x: -100, opacity: 0, duration: 0.5, ease: "power4.out" }, 6.7);
+
+    // Flash all red briefly — "these are wrong"
+    tl.to(['#w5', '#w6', '#w7'], { color: '#ef4444', duration: 0.15, ease: "none" }, 7.5);
+    tl.to(['#w5', '#w6', '#w7'], { color: '#f2f2f2', duration: 0.3, ease: "power2.out" }, 7.65);
+
+    // Strike-through effect via clip-path
+    tl.to('#w5', { textDecoration: 'line-through', color: 'rgba(255,255,255,0.2)', duration: 0.3, ease: "power2.out" }, 8.0);
+    tl.to('#w6', { textDecoration: 'line-through', color: 'rgba(255,255,255,0.2)', duration: 0.3, ease: "power2.out" }, 8.2);
+    tl.to('#w7', { textDecoration: 'line-through', color: 'rgba(255,255,255,0.2)', duration: 0.3, ease: "power2.out" }, 8.4);
+
+    tl.to('#s2', { opacity: 0, scale: 0.9, filter: 'blur(8px)', duration: 0.5, ease: "power3.in" }, 9.5);
+
+    // ─── PHASE 3: Climax (10–15s) ───
+    tl.to('#s3', { opacity: 1, duration: 0.01 }, 10);
+
+    tl.from('#w8', { y: 40, opacity: 0, duration: 0.5, ease: "power3.out" }, 10.3);
+    tl.from('#w9', { scale: 2, opacity: 0, duration: 1.0, ease: "back.out(1.4)" }, 10.6);
+    
+    // "motion" gets a glow
+    tl.to('#w9', { textShadow: '0 0 80px rgba(67,211,201,0.4)', duration: 0.8, ease: "power2.out" }, 11.5);
+
+    tl.from('#w10', { x: -80, opacity: 0, duration: 0.5, ease: "power4.out" }, 12.0);
+    tl.from('#w11', { x: 80, opacity: 0, duration: 0.5, ease: "power4.out" }, 12.1);
+
+    // "breathes" pulses with scale
+    tl.to('#w11', { scale: 1.05, duration: 1.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, 12.5);
+
+    tl.to('#s3', { opacity: 0, y: -20, duration: 0.5, ease: "power2.in" }, 14.5);
+
+    // ─── PHASE 4: Resolution (15–20s) ───
+    tl.to('#s4', { opacity: 1, duration: 0.01 }, 15);
+
+    tl.from('#w12', { y: 20, opacity: 0, duration: 0.6, ease: "power3.out" }, 15.3);
+    tl.from('#w13', { scale: 0.7, opacity: 0, duration: 0.8, ease: "back.out(1.7)" }, 15.8);
+    tl.from('#div3', { scaleX: 0, duration: 0.5, ease: "power3.out" }, 16.5);
+    tl.from('#w14', { y: 15, opacity: 0, duration: 0.5, ease: "power3.out" }, 17.0);
+
+    // Gentle breathing on final logo
+    tl.to('#w13', { scale: 1.02, duration: 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 17.5);
+
+    // Register
+    window.__timelines = window.__timelines || {};
+    window.__timelines['kinetic-type'] = tl;
+  </script>
+</body>
+</html>

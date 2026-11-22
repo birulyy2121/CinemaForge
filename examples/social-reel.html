@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #070708; color: #f2f2f2; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; }
+    
+    .grain::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.5; mix-blend-mode: overlay;
+    }
+
+    .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8%; opacity: 0; }
+
+    /* 9:16 phone frame within the 16:9 canvas */
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      background: #1a1a1a;
+      border-radius: 44px;
+      border: 3px solid #333;
+      padding: 14px;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone-notch {
+      width: 130px; height: 30px;
+      background: #000;
+      border-radius: 0 0 22px 22px;
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+
+    .phone-screen {
+      width: 100%; height: 100%;
+      background: #0a0a0a;
+      border-radius: 32px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 60px 24px 32px;
+    }
+
+    /* Reel content elements */
+    .reel-hook {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .reel-hook .accent { color: #43d3c9; }
+
+    .reel-point {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .reel-num {
+      width: 28px;
+      height: 28px;
+      background: #43d3c9;
+      color: #070708;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .reel-cta {
+      margin-top: auto;
+      text-align: center;
+    }
+
+    .reel-cta-btn {
+      background: #43d3c9;
+      color: #070708;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .reel-cta-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 12px;
+    }
+
+    /* Side indicators (simulated UI) */
+    .side-icons {
+      position: absolute;
+      right: 32px;
+      bottom: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .side-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+
+    .side-count {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-top: -8px;
+    }
+  </style>
+</head>
+
+<body class="grain">
+  <div id="root"
+    data-composition-id="social-reel"
+    data-start="0"
+    data-duration="15"
+    data-width="1920"
+    data-height="1080"
+    data-fps="60"
+  >
+    <!-- Phone appears centered in 16:9 canvas -->
+    <div class="scene" id="scene-reel" style="flex-direction: row; gap: 60px;">
+      <div class="phone-frame" id="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <!-- Hook -->
+          <div class="reel-hook" id="reel-hook">
+            Stop making <span class="accent">ugly</span> videos
+          </div>
+
+          <!-- Points -->
+          <div class="reel-point" id="p1">
+            <div class="reel-num">1</div>
+            <span>Use spring physics, not linear</span>
+          </div>
+          <div class="reel-point" id="p2">
+            <div class="reel-num">2</div>
+            <span>Stagger everything</span>
+          </div>
+          <div class="reel-point" id="p3">
+            <div class="reel-num">3</div>
+            <span>Dark mode + film grain</span>
+          </div>
+          <div class="reel-point" id="p4">
+            <div class="reel-num">4</div>
+            <span>Overshoot, then settle</span>
+          </div>
+          <div class="reel-point" id="p5">
+            <div class="reel-num">5</div>
+            <span>Beat-sync your transitions</span>
+          </div>
+
+          <!-- CTA -->
+          <div class="reel-cta" id="reel-cta">
+            <button class="reel-cta-btn" id="cta-btn">Use CinemaForge — Free</button>
+            <div class="reel-cta-label" id="cta-lbl">github.com/birulyy2121/CinemaForge</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description alongside -->
+      <div style="max-width: 400px;" id="desc-panel">
+        <div style="font-size: 36px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px;" id="desc-title">
+          9:16 Social Reel
+        </div>
+        <div style="color: rgba(255,255,255,0.4); font-size: 16px; line-height: 1.6;" id="desc-body">
+          Vertical-first layout with faster timing (0.3s transitions), bolder scale changes, and auto-loop design. The last frame visually matches the first for seamless Instagram loop.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.to('#scene-reel', { opacity: 1, duration: 0.01 }, 0);
+
+    // Phone slides up with spring
+    tl.from('#phone', { y: 200, opacity: 0, scale: 0.9, duration: 1, ease: "back.out(1.4)" }, 0.3);
+
+    // Description panel
+    tl.from('#desc-title', { x: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 0.8);
+    tl.from('#desc-body', { x: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 1.0);
+
+    // Hook text animates
+    tl.from('#reel-hook', { y: 30, opacity: 0, duration: 0.5, ease: "power4.out" }, 1.5);
+
+    // "ugly" accent flash
+    tl.from('#reel-hook .accent', { scale: 1.3, duration: 0.4, ease: "back.out(2)" }, 2.0);
+
+    // Points stagger in rapidly
+    ['#p1', '#p2', '#p3', '#p4', '#p5'].forEach((p, i) => {
+      tl.from(p, { x: 60, opacity: 0, duration: 0.4, ease: "power4.out" }, 3.0 + i * 0.3);
+    });
+
+    // Number badges pulse
+    tl.to('.reel-num', {
+      boxShadow: '0 0 15px rgba(67,211,201,0.4)',
+      duration: 0.5,
+      stagger: 0.15,
+      ease: "power2.out"
+    }, 5.0);
+
+    // Individual point highlights
+    tl.to('#p1', { borderColor: 'rgba(67,211,201,0.2)', duration: 0.3, ease: "power2.out" }, 5.5);
+    tl.to('#p2', { borderColor: 'rgba(67,211,201,0.2)', duration: 0.3, ease: "power2.out" }, 6.5);
+    tl.to('#p3', { borderColor: 'rgba(67,211,201,0.2)', duration: 0.3, ease: "power2.out" }, 7.5);
+    tl.to('#p4', { borderColor: 'rgba(67,211,201,0.2)', duration: 0.3, ease: "power2.out" }, 8.5);
+    tl.to('#p5', { borderColor: 'rgba(67,211,201,0.2)', duration: 0.3, ease: "power2.out" }, 9.5);
+
+    // CTA enters
+    tl.from('#cta-btn', { y: 20, opacity: 0, scale: 0.9, duration: 0.5, ease: "back.out(2)" }, 10.5);
+    tl.from('#cta-lbl', { opacity: 0, duration: 0.4, ease: "power2.out" }, 11.0);
+
+    // CTA button glow
+    tl.to('#cta-btn', {
+      boxShadow: '0 0 30px rgba(67,211,201,0.3)',
+      duration: 1.5,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: 1,
+    }, 11.5);
+
+    // Gentle phone breathe
+    tl.to('#phone', { scale: 1.01, y: -5, duration: 2, ease: "sine.inOut", yoyo: true }, 12);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines['social-reel'] = tl;
+  </script>
+</body>
+</html>

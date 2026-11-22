@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #070708;
+      color: #f2f2f2;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════
+       CinemaForge Base Styles
+       ═══════════════════════════════════════════ */
+    
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10%;
+      opacity: 0;
+    }
+
+    /* Film Grain Overlay */
+    .grain::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+      mix-blend-mode: overlay;
+    }
+
+    /* Ambient Glow */
+    .glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #43d3c9 0%, transparent 70%);
+      opacity: 0.06;
+      filter: blur(100px);
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════
+       ACT 1: HOOK — Stop the scroll
+       ═══════════════════════════════════════════ */
+    
+    .hook-label {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 24px;
+    }
+
+    .hook-text {
+      font-size: 80px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      text-align: center;
+      max-width: 900px;
+    }
+
+    .hook-text .accent {
+      color: #43d3c9;
+    }
+
+    /* ═══════════════════════════════════════════
+       ACT 2: BUILD — Establish context
+       ═══════════════════════════════════════════ */
+    
+    .pain-cards {
+      display: flex;
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .pain-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 32px;
+      width: 260px;
+      text-align: center;
+    }
+
+    .pain-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+
+    .pain-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pain-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════
+       ACT 3: REVEAL — The product
+       ═══════════════════════════════════════════ */
+    
+    .browser-window {
+      width: 800px;
+      background: #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .browser-chrome {
+      height: 40px;
+      background: #262626;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+    }
+
+    .browser-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .browser-url {
+      flex: 1;
+      height: 24px;
+      background: #1a1a1a;
+      border-radius: 6px;
+      margin-left: 12px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: #666;
+      font-size: 12px;
+      font-family: 'Inter', monospace;
+    }
+
+    .browser-content {
+      min-height: 420px;
+      background: #0a0a0a;
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .metric-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .metric-label {
+      color: rgba(255,255,255,0.4);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .metric-delta {
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 6px;
+      color: #34d399;
+    }
+
+    /* Feature callouts */
+    .feature-list {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .feature-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #43d3c9;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       ACT 4: RESOLVE — CTA
+       ═══════════════════════════════════════════ */
+    
+    .cta-logo {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .cta-tagline {
+      font-size: 20px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 400;
+      margin-bottom: 32px;
+    }
+
+    .cta-button {
+      background: #43d3c9;
+      color: #070708;
+      border: none;
+      padding: 16px 48px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .cta-url {
+      margin-top: 24px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.3);
+      font-family: 'Inter', monospace;
+    }
+  </style>
+</head>
+
+<body class="grain">
+  <div id="root"
+    data-composition-id="product-launch"
+    data-start="0"
+    data-duration="30"
+    data-width="1920"
+    data-height="1080"
+    data-fps="60"
+  >
+    <!-- Ambient glow -->
+    <div class="glow" id="glow1" style="top: 20%; left: 60%"></div>
+    <div class="glow" id="glow2" style="top: 60%; left: 30%; background: radial-gradient(circle, #6366f1 0%, transparent 70%)"></div>
+
+    <!-- ═══ ACT 1: HOOK (0s–3s) ═══ -->
+    <div class="scene" id="scene-hook">
+      <div class="hook-label" id="hook-label">The old way is broken</div>
+      <div class="hook-text" id="hook-text">
+        Your data<br>deserves <span class="accent">better</span>
+      </div>
+    </div>
+
+    <!-- ═══ ACT 2: BUILD (3s–12s) ═══ -->
+    <div class="scene" id="scene-build">
+      <div class="hook-text" id="build-title" style="font-size: 48px; margin-bottom: 20px">
+        The problems you know
+      </div>
+      <div class="pain-cards" id="pain-cards">
+        <div class="pain-card" id="pain-1">
+          <div class="pain-icon">📊</div>
+          <div class="pain-title">Scattered Data</div>
+          <div class="pain-desc">Your metrics live in 12 different tabs</div>
+        </div>
+        <div class="pain-card" id="pain-2">
+          <div class="pain-icon">⏱️</div>
+          <div class="pain-title">Slow Insights</div>
+          <div class="pain-desc">Hours to build a single report</div>
+        </div>
+        <div class="pain-card" id="pain-3">
+          <div class="pain-icon">🔒</div>
+          <div class="pain-title">No Collaboration</div>
+          <div class="pain-desc">Sharing means exporting CSVs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ACT 3: REVEAL (12s–22s) ═══ -->
+    <div class="scene" id="scene-reveal" style="flex-direction: row; gap: 60px">
+      <div>
+        <div class="browser-window" id="browser">
+          <div class="browser-chrome">
+            <div class="browser-dot" style="background:#ff5f57"></div>
+            <div class="browser-dot" style="background:#febc2e"></div>
+            <div class="browser-dot" style="background:#28c840"></div>
+            <div class="browser-url">app.dataforge.io/dashboard</div>
+          </div>
+          <div class="browser-content">
+            <div class="metric-card" id="mc-1">
+              <div class="metric-label">Monthly Revenue</div>
+              <div class="metric-value" id="mv-1">$0</div>
+              <div class="metric-delta">↑ 23.5%</div>
+            </div>
+            <div class="metric-card" id="mc-2">
+              <div class="metric-label">Active Users</div>
+              <div class="metric-value" id="mv-2">0</div>
+              <div class="metric-delta">↑ 18.2%</div>
+            </div>
+            <div class="metric-card" id="mc-3">
+              <div class="metric-label">Conversion Rate</div>
+              <div class="metric-value" id="mv-3">0%</div>
+              <div class="metric-delta">↑ 5.1%</div>
+            </div>
+            <div class="metric-card" id="mc-4">
+              <div class="metric-label">Response Time</div>
+              <div class="metric-value" id="mv-4">0ms</div>
+              <div class="metric-delta">↓ 42%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-list" id="features">
+        <div class="feature-item" id="f-1">
+          <div class="feature-dot"></div>
+          <span>Real-time dashboards</span>
+        </div>
+        <div class="feature-item" id="f-2">
+          <div class="feature-dot"></div>
+          <span>One-click reports</span>
+        </div>
+        <div class="feature-item" id="f-3">
+          <div class="feature-dot"></div>
+          <span>Team collaboration</span>
+        </div>
+        <div class="feature-item" id="f-4">
+          <div class="feature-dot"></div>
+          <span>AI-powered insights</span>
+        </div>
+        <div class="feature-item" id="f-5">
+          <div class="feature-dot"></div>
+          <span>Enterprise security</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ACT 4: RESOLVE (22s–30s) ═══ -->
+    <div class="scene" id="scene-resolve">
+      <div class="cta-logo" id="cta-logo">DataForge</div>
+      <div class="cta-tagline" id="cta-tagline">Your data, beautifully unified.</div>
+      <button class="cta-button" id="cta-button">Start Free Trial</button>
+      <div class="cta-url" id="cta-url">dataforge.io</div>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════
+    // CinemaForge Timeline — Product Launch Ad
+    // 30 seconds at 60fps
+    // ═══════════════════════════════════════════
+
+    const tl = gsap.timeline({ paused: true });
+
+    // ─── Ambient glow drift (continuous) ───
+    tl.to('#glow1', { x: 100, y: -50, duration: 30, ease: "sine.inOut", repeat: -1, yoyo: true }, 0);
+    tl.to('#glow2', { x: -80, y: 60, duration: 25, ease: "sine.inOut", repeat: -1, yoyo: true }, 0);
+
+    // ═══ ACT 1: HOOK (0–3s) ═══
+    
+    // Scene enters
+    tl.to('#scene-hook', { opacity: 1, duration: 0.01 }, 0);
+    
+    // Label fades in with upward drift
+    tl.from('#hook-label', { 
+      y: 20, opacity: 0, 
+      duration: 0.8, 
+      ease: "power3.out" 
+    }, 0.2);
+    
+    // Main text — character-level reveal with stagger
+    // Split "Your data deserves better" into word-level animation
+    tl.from('#hook-text', { 
+      y: 60, 
+      opacity: 0, 
+      scale: 0.95,
+      duration: 1.0, 
+      ease: "power4.out" 
+    }, 0.5);
+
+    // Accent color pulse on "better"
+    tl.from('#hook-text .accent', {
+      color: '#f2f2f2',
+      textShadow: '0 0 0px transparent',
+      duration: 0.6,
+      ease: "power2.out",
+    }, 1.2);
+    tl.to('#hook-text .accent', {
+      textShadow: '0 0 40px rgba(67,211,201,0.3)',
+      duration: 0.4,
+      ease: "power2.out",
+    }, 1.4);
+
+    // Hook exit — dissolve up
+    tl.to('#scene-hook', { 
+      y: -40, opacity: 0, 
+      duration: 0.5, 
+      ease: "power2.in" 
+    }, 2.5);
+
+    // ═══ ACT 2: BUILD (3–12s) ═══
+    
+    tl.to('#scene-build', { opacity: 1, duration: 0.01 }, 3);
+    
+    // Title enters
+    tl.from('#build-title', { 
+      y: 40, opacity: 0, 
+      duration: 0.7, 
+      ease: "power3.out" 
+    }, 3.2);
+    
+    // Pain cards stagger in with spring-like overshoot
+    tl.from('#pain-1', { 
+      y: 80, opacity: 0, scale: 0.9, 
+      duration: 0.8, 
+      ease: "back.out(1.7)" 
+    }, 4.0);
+    
+    tl.from('#pain-2', { 
+      y: 80, opacity: 0, scale: 0.9, 
+      duration: 0.8, 
+      ease: "back.out(1.7)" 
+    }, 4.2);  // 0.2s stagger — ease-out curve
+    
+    tl.from('#pain-3', { 
+      y: 80, opacity: 0, scale: 0.9, 
+      duration: 0.8, 
+      ease: "back.out(1.7)" 
+    }, 4.5);  // 0.3s stagger — wider gap for natural feel
+
+    // Individual card highlights with accent glow
+    tl.to('#pain-1', {
+      borderColor: 'rgba(67,211,201,0.2)',
+      boxShadow: '0 0 30px rgba(67,211,201,0.05)',
+      duration: 0.6,
+      ease: "power2.out"
+    }, 5.5);
+
+    tl.to('#pain-2', {
+      borderColor: 'rgba(67,211,201,0.2)',
+      boxShadow: '0 0 30px rgba(67,211,201,0.05)',
+      duration: 0.6,
+      ease: "power2.out"
+    }, 6.0);
+
+    tl.to('#pain-3', {
+      borderColor: 'rgba(67,211,201,0.2)',
+      boxShadow: '0 0 30px rgba(67,211,201,0.05)',
+      duration: 0.6,
+      ease: "power2.out"
+    }, 6.5);
+
+    // Red glow on cards — "these are problems"
+    tl.to('.pain-card', {
+      borderColor: 'rgba(239,68,68,0.3)',
+      boxShadow: '0 0 40px rgba(239,68,68,0.08)',
+      duration: 0.8,
+      ease: "power2.out"
+    }, 8.0);
+
+    // Build exit
+    tl.to('#scene-build', { 
+      scale: 1.1, opacity: 0, 
+      filter: 'blur(10px)',
+      duration: 0.6, 
+      ease: "power3.in" 
+    }, 11.4);
+
+    // ═══ ACT 3: REVEAL (12–22s) ═══
+    
+    tl.to('#scene-reveal', { opacity: 1, duration: 0.01 }, 12);
+
+    // Browser window sweeps in with spring physics
+    tl.from('#browser', { 
+      y: 120, 
+      opacity: 0, 
+      scale: 0.85, 
+      duration: 1.2, 
+      ease: "back.out(1.4)" 
+    }, 12.2);
+
+    // Metric cards stagger in
+    tl.from('#mc-1', { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 13.0);
+    tl.from('#mc-2', { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 13.15);
+    tl.from('#mc-3', { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 13.3);
+    tl.from('#mc-4', { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 13.45);
+
+    // Counter animations — numbers count up
+    const counter1 = { val: 0 };
+    tl.to(counter1, { val: 2.4, duration: 1.5, ease: "power2.out",
+      onUpdate: () => { document.getElementById('mv-1').textContent = '$' + counter1.val.toFixed(1) + 'M'; }
+    }, 13.5);
+
+    const counter2 = { val: 0 };
+    tl.to(counter2, { val: 48200, duration: 1.5, ease: "power2.out",
+      onUpdate: () => { document.getElementById('mv-2').textContent = Math.round(counter2.val).toLocaleString(); }
+    }, 13.7);
+
+    const counter3 = { val: 0 };
+    tl.to(counter3, { val: 12.8, duration: 1.5, ease: "power2.out",
+      onUpdate: () => { document.getElementById('mv-3').textContent = counter3.val.toFixed(1) + '%'; }
+    }, 13.9);
+
+    const counter4 = { val: 500 };
+    tl.to(counter4, { val: 42, duration: 1.5, ease: "power2.out",
+      onUpdate: () => { document.getElementById('mv-4').textContent = Math.round(counter4.val) + 'ms'; }
+    }, 14.1);
+
+    // Feature list staggers in from the right
+    ['#f-1', '#f-2', '#f-3', '#f-4', '#f-5'].forEach((sel, i) => {
+      tl.from(sel, { 
+        x: 60, opacity: 0, 
+        duration: 0.6, 
+        ease: "power3.out" 
+      }, 15.5 + i * 0.15);
+    });
+
+    // Feature dots pulse
+    tl.to('.feature-dot', {
+      boxShadow: '0 0 12px rgba(67,211,201,0.5)',
+      duration: 0.8,
+      stagger: 0.1,
+      ease: "power2.out"
+    }, 17);
+
+    // Browser window gets a subtle glow to emphasize it
+    tl.to('#browser', {
+      boxShadow: '0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(67,211,201,0.08)',
+      duration: 1,
+      ease: "power2.out"
+    }, 18);
+
+    // Reveal exit
+    tl.to('#scene-reveal', { 
+      opacity: 0, 
+      scale: 0.95,
+      duration: 0.6, 
+      ease: "power2.in" 
+    }, 21.4);
+
+    // ═══ ACT 4: RESOLVE (22–30s) ═══
+    
+    tl.to('#scene-resolve', { opacity: 1, duration: 0.01 }, 22);
+
+    // Logo enters with spring overshoot
+    tl.from('#cta-logo', { 
+      scale: 0.5, 
+      opacity: 0, 
+      duration: 1.0, 
+      ease: "back.out(1.7)" 
+    }, 22.2);
+
+    // Tagline fades in underneath
+    tl.from('#cta-tagline', { 
+      y: 20, opacity: 0, 
+      duration: 0.7, 
+      ease: "power3.out" 
+    }, 23.0);
+
+    // CTA button enters with anticipation
+    tl.from('#cta-button', { 
+      scale: 0.8, 
+      opacity: 0, 
+      y: 20,
+      duration: 0.6, 
+      ease: "back.out(2)" 
+    }, 24.0);
+
+    // Button glow pulse
+    tl.to('#cta-button', {
+      boxShadow: '0 0 40px rgba(67,211,201,0.3)',
+      duration: 1.5,
+      ease: "power2.inOut",
+      yoyo: true,
+      repeat: 2,
+    }, 24.5);
+
+    // URL fades in
+    tl.from('#cta-url', { 
+      opacity: 0, 
+      duration: 0.5, 
+      ease: "power2.out" 
+    }, 25.0);
+
+    // Final settle — everything subtly breathes
+    tl.to('#cta-logo', { 
+      scale: 1.02, 
+      duration: 3, 
+      ease: "sine.inOut", 
+      yoyo: true, 
+      repeat: 1 
+    }, 25.5);
+
+    // ═══ Register timeline for HyperFrames ═══
+    window.__timelines = window.__timelines || {};
+    window.__timelines['product-launch'] = tl;
+  </script>
+</body>
+</html>
